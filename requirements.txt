@@ -1,0 +1,10 @@
+langchain-unstructured
+langchain-community
+unstructured-client
+unstructured
+"unstructured[ocr]"
+"unstructured[pdf]" 
+python-magic
+paddleocr
+pytesseract
+pi_heif
