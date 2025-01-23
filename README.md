@@ -41,6 +41,16 @@ create relations with the following command
 psql -h localhost -U igs -d igs -a -f create_db.sql
 ```
 
+## compose pdf_list.json
+
+use ***get_links.py*** on every url to get a list of pdf links on the page with the following command
+
+```shell
+python3 get_links.py --url <url> --output <path/to/json>
+```
+
+compose the pdf_list.json in the format as the one provided in the root path.
+
 ## download references
 
 ```shell
