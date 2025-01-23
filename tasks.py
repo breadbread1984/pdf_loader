@@ -35,7 +35,7 @@ def download(input_args):
         if exists(join(output_path, original_fname)): break
       page.close()
   succeed = exists(join(output_path, renamed_fname))
-  return {'url': url, 'filename': original_name, 'output_path': join(output_path, renamed_fname) if succeed else None, 'description': description}
+  return {'url': url, 'filename': original_fname, 'output_path': join(output_path, renamed_fname) if succeed else None, 'description': description}
 
 from minio import Minio
 from minio.error import S3Error
