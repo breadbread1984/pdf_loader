@@ -2,7 +2,7 @@
 
 from absl import flags, app
 from shutil import rmtree
-from os import mkdir
+from os import mkdir, remove
 from os.path import exists
 import json
 import concurrent.futures
@@ -14,7 +14,7 @@ FLAGS = flags.FLAGS
 def add_options():
   flags.DEFINE_string('input_json', default = 'pdf_list.json', help = 'a list of pdf')
   flags.DEFINE_string('download_path', default = 'pdfs', help = 'path to directory')
-  flags.DEFINE_string('minio_host', default = 'http://localhost:9000', help = 'minio host')
+  flags.DEFINE_string('minio_host', default = 'localhost:9000', help = 'minio host')
   flags.DEFINE_string('minio_user', default = 'minioadmin', help = 'minio username')
   flags.DEFINE_string('minio_password', default = 'minioadmin', help = 'minio password')
   flags.DEFINE_string('minio_bucket', default = 'references', help = 'minio bucket')
@@ -29,13 +29,13 @@ def add_options():
 
 def main(unused_argv):
   # download all pdfs
-  if exists(FLAGS.download_path): rmtree(FLAGS.download_path)
-  mkdir(FLAGS.download_path)
   with open(FLAGS.input_json, 'r') as f:
     pdfs = json.loads(f.read())
   if FLAGS.new:
-    rmtree('download_succeed.json')
-    rmtree('minio_succeed.json')
+    if exists(FLAGS.download_path): rmtree(FLAGS.download_path)
+    mkdir(FLAGS.download_path)
+    remove('download_succeed.json')
+    remove('minio_succeed.json')
   if not exists('download_succeed.json'):
     download_tasks = list()
     for description, pdf_list in pdfs.items():
