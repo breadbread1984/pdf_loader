@@ -21,3 +21,21 @@ docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minioadmin" -e "MINI
 visit [minio adminstration website](http://localhost:9000). login with minioadmin:minioadmin.
 
 create bucket references
+
+## Launch Postgresql
+
+```shell
+docker pull postgres
+docker run -e POSTGRES_DB=igs \
+           -e POSTGRES_USER=igs \
+           -e POSTGRES_PASSWORD=12345678 \
+           -p 5432:5432 \
+           --privileged --shm-size 12G -d postgres
+```
+
+create relations with the following command
+
+```shell
+psql -h localhost -U igs -d igs -a -f create_db.sql
+```
+
