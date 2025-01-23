@@ -3,6 +3,7 @@
 from absl import flags, app
 from shutil import rmtree
 from os import mkdir
+from os.path import exists
 import json
 import concurrent.futures
 import psycopg2
