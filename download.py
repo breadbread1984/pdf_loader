@@ -34,8 +34,8 @@ def main(unused_argv):
   if FLAGS.new:
     if exists(FLAGS.download_path): rmtree(FLAGS.download_path)
     mkdir(FLAGS.download_path)
-    remove('download_succeed.json')
-    remove('minio_succeed.json')
+    if exists('download_succeed.json'): remove('download_succeed.json')
+    if exists('minio_succeed.json'): remove('minio_succeed.json')
   if not exists('download_succeed.json'):
     download_tasks = list()
     for description, pdf_list in pdfs.items():
