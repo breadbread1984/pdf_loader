@@ -22,7 +22,7 @@ def download(input_args):
   else:
     # javascript
     with sync_playwright() as p:
-      browswer = p.chromium.launch()
+      browser = p.chromium.launch()
       page = browser.new_page()
       for i in range(retry):
         try:
