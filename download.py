@@ -44,6 +44,7 @@ def main(unused_argv):
       FLAGS.minio_password,
       FLAGS.minio_bucket,
       file_detail['output_path'],
+      file_detail['url'],
       file_detail['description']
     ))
   with concurrent.futures.ThreadPoolExecutor(max_workers = FLAGS.workers) as executor:
@@ -53,6 +54,7 @@ def main(unused_argv):
   with open('minio_failed.json', 'w') as f:
     f.write(json.dumps(failed_results))
   # add to sql database
+
 
 if __name__ == "__main__":
   add_options()
