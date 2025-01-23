@@ -58,5 +58,5 @@ def minio_upload(input_args):
       file_path
     )
   except S3Error as exc:
-      return {'file_path': file_path, 'minio_url': None, 'description': description, 'url': url, 'filename': filename}
+    return {'file_path': file_path, 'minio_url': None, 'description': description, 'url': url, 'filename': filename}
   return {'file_path': file_path, 'minio_url': f'{minio_host}/{minio_bucket}/{basename(file_path)}', 'description': description, 'url': url, 'filename': filename}
