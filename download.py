@@ -5,6 +5,7 @@ from shutil import rmtree
 from os import mkdir
 import json
 import concurrent.futures
+import psycopg2
 from tasks import download, minio_upload
 
 FLAGS = flags.FLAGS
@@ -16,6 +17,12 @@ def add_options():
   flags.DEFINE_string('minio_user', default = 'minioadmin', help = 'minio username')
   flags.DEFINE_string('minio_password', default = 'minioadmin', help = 'minio password')
   flags.DEFINE_string('minio_bucket', default = 'references', help = 'minio bucket')
+  flags.DEFINE_string('psql_host', default = 'localhost', help = 'postgresql host')
+  flags.DEFINE_string('psql_port', default = '5432', help = 'postgresql port')
+  flags.DEFINE_string('psql_user', default = 'igs', help = 'postgresql username')
+  flags.DEFINE_string('psql_db', default = 'igs', help = 'postgresql database')
+  flags.DEFINE_string('psql_password', default = 'igs', help = 'postgresql password')
+  flags.DEFINE_string('psql_')
   flags.DEFINE_integer('retry', default = 5, help = 'retry times')
   flags.DEFINE_integer('workers', default = 16, help = 'number of workers')
 
@@ -45,6 +52,7 @@ def main(unused_argv):
       FLAGS.minio_bucket,
       file_detail['output_path'],
       file_detail['url'],
+      file_detail['filename'],
       file_detail['description']
     ))
   with concurrent.futures.ThreadPoolExecutor(max_workers = FLAGS.workers) as executor:
@@ -54,7 +62,21 @@ def main(unused_argv):
   with open('minio_failed.json', 'w') as f:
     f.write(json.dumps(failed_results))
   # add to sql database
-
+  conn = psycopg2.connect(
+    database = FLAGS.psql_db,
+    user = FLAGS.psql_user,
+    password = FLAGS.psql_password,
+    host = FLAGS.psql_host,
+    port = FLAGS.psql_port,
+  )
+  cur = conn.cursor()
+  for detail in succeed_results:
+    url = detail['url']
+    filename = detail['filename']
+    description = detail['description']
+    object_url = detail['minio_url']
+    cur.execute(f"insert into references (url, filename, description, object_url) values ('{url}','{filename}','{description}','{object_url}')")
+    conn.commit()
 
 if __name__ == "__main__":
   add_options()

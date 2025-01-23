@@ -9,4 +9,4 @@ paddleocr
 pytesseract
 pi_heif
 minio
-
+psycopg2
