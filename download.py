@@ -8,21 +8,13 @@ import json
 import concurrent.futures
 import psycopg2
 from tasks import download, minio_upload
+from configs import *
 
 FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_string('input_json', default = 'pdf_list.json', help = 'a list of pdf')
   flags.DEFINE_string('download_path', default = 'pdfs', help = 'path to directory')
-  flags.DEFINE_string('minio_host', default = 'localhost:9000', help = 'minio host')
-  flags.DEFINE_string('minio_user', default = 'minioadmin', help = 'minio username')
-  flags.DEFINE_string('minio_password', default = 'minioadmin', help = 'minio password')
-  flags.DEFINE_string('minio_bucket', default = 'references', help = 'minio bucket')
-  flags.DEFINE_string('psql_host', default = 'localhost', help = 'postgresql host')
-  flags.DEFINE_string('psql_port', default = '5432', help = 'postgresql port')
-  flags.DEFINE_string('psql_user', default = 'igs', help = 'postgresql username')
-  flags.DEFINE_string('psql_db', default = 'igs', help = 'postgresql database')
-  flags.DEFINE_string('psql_password', default = '12345678', help = 'postgresql password')
   flags.DEFINE_integer('retry', default = 5, help = 'retry times')
   flags.DEFINE_integer('workers', default = 32, help = 'number of workers')
   flags.DEFINE_boolean('new', default = False, help = 'whether the download task is new')
@@ -57,10 +49,6 @@ def main(unused_argv):
     minio_tasks = list()
     for file_detail in succeed_results:
       minio_tasks.append((
-        FLAGS.minio_host,
-        FLAGS.minio_user,
-        FLAGS.minio_password,
-        FLAGS.minio_bucket,
         file_detail['output_path'],
         file_detail['url'],
         file_detail['filename'],
@@ -79,11 +67,11 @@ def main(unused_argv):
       succeed_results = json.loads(f.read())
   # add to sql database
   conn = psycopg2.connect(
-    database = FLAGS.psql_db,
-    user = FLAGS.psql_user,
-    password = FLAGS.psql_password,
-    host = FLAGS.psql_host,
-    port = FLAGS.psql_port,
+    database = psql_db,
+    user = psql_user,
+    password = psql_password,
+    host = psql_host,
+    port = psql_port,
   )
   cur = conn.cursor()
   for detail in succeed_results:
