@@ -49,8 +49,8 @@ def main(unused_argv):
     ))
   with concurrent.futures.ThreadPoolExecutor(max_workers = FLAGS.workers) as executor:
     results = list(executor.map(minio_upload, minio_tasks))
-  failed_results = list(filter(lambda x: x['url'] is None, results))
-  succeed_results = list(filter(lambda x: x['url'] is not None, results))
+  failed_results = list(filter(lambda x: x['minio_url'] is None, results))
+  succeed_results = list(filter(lambda x: x['minio_url'] is not None, results))
   with open('minio_failed.json', 'w') as f:
     f.write(json.dumps(failed_results))
   # add to sql database
