@@ -5,6 +5,7 @@ from os.path import join, exists, splitext, basename
 from playwright.sync_api import sync_playwright
 from urllib.parse import urlparse
 import wget
+from configs import *
 
 def download(input_args):
   url, output_path, description, retry = input_args
@@ -41,7 +42,7 @@ from minio import Minio
 from minio.error import S3Error
 
 def minio_upload(input_args):
-  minio_host, minio_user, minio_password, minio_bucket, file_path, url, filename, description = input_args
+  file_path, url, filename, description = input_args
   client = Minio(
     endpoint = minio_host,
     access_key = minio_user,
@@ -60,3 +61,19 @@ def minio_upload(input_args):
   except S3Error as exc:
     return {'file_path': file_path, 'minio_url': None, 'description': description, 'url': url, 'filename': filename}
   return {'file_path': file_path, 'minio_url': f'{minio_host}/{minio_bucket}/{basename(file_path)}', 'description': description, 'url': url, 'filename': filename}
+
+def minio_download(input_args):
+  url, = input_args
+  client = Minio(
+    endpoint = minio_host,
+    access_key = minio_user,
+    secret_key = minio_password,
+    secure = False
+  )
+  parsed_url = urlparse(url)
+  bucket = parsed_url.path.split('/')[-2]
+  assert bucket == minio_bucket
+  fname = parsed_url.path.split('/')[-1]
+  try:
+    client.fget_object(minio_bucket, fname, fname)
+
