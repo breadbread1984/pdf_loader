@@ -8,3 +8,5 @@ python-magic
 paddleocr
 pytesseract
 pi_heif
+minio
+
