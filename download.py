@@ -74,7 +74,7 @@ def main(unused_argv):
     filename = detail['filename']
     description = detail['description']
     object_url = detail['minio_url']
-    cur.execute(f"insert into references (url, filename, description, object_url) values ('{url}','{filename}','{description}','{object_url}')")
+    cur.execute(f"insert into materials (url, filename, description, object_url) values ('{url}','{filename}','{description}','{object_url}')")
     conn.commit()
 
 if __name__ == "__main__":

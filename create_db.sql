@@ -1,6 +1,4 @@
-#!/usr/bin/psql
-
-create table references (
+create table materials (
   ref_id serial primary key,
   url varchar(500),         /*original download url*/
   filename varchar(500),    /*original name of the file*/
