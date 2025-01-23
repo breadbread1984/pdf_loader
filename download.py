@@ -34,7 +34,7 @@ def main(unused_argv):
     pdfs = json.loads(f.read())
   download_tasks = list()
   for description, pdf_list in pdfs.items():
-    for _, url in pdf_list:
+    for _, url in pdf_list.items():
       download_tasks.append((url, FLAGS.download_path, description, FLAGS.retry))
   with concurrent.futures.ThreadPoolExecutor(max_workers = FLAGS.workers) as executor:
     results = list(executor.map(download, download_tasks))
