@@ -53,8 +53,8 @@ def minio_upload(input_args):
     if not found:
       client.make_bucket(minio_bucket)
     client.fput_object(
-      minio_bucket
-      basename(file_path)
+      minio_bucket,
+      basename(file_path),
       file_path
     )
   except S3Error as exc:
