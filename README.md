@@ -41,3 +41,8 @@ create relations with the following command
 psql -h localhost -U igs -d igs -a -f create_db.sql
 ```
 
+## download references
+
+```shell
+python3 download.py --input_json pdf_list.json --minio_host <minio/host> --psql_host <psql/host>
+```

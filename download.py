@@ -22,9 +22,8 @@ def add_options():
   flags.DEFINE_string('psql_user', default = 'igs', help = 'postgresql username')
   flags.DEFINE_string('psql_db', default = 'igs', help = 'postgresql database')
   flags.DEFINE_string('psql_password', default = 'igs', help = 'postgresql password')
-  flags.DEFINE_string('psql_')
   flags.DEFINE_integer('retry', default = 5, help = 'retry times')
-  flags.DEFINE_integer('workers', default = 16, help = 'number of workers')
+  flags.DEFINE_integer('workers', default = 32, help = 'number of workers')
 
 def main(unused_argv):
   # download all pdfs
